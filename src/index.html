@@ -2,14 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <title>Love Chart</title>
     <link href="./index.css" rel="stylesheet" />
     <script src="./index.js" type="module"></script>
   </head>
   <body>
-    <div>
-      <canvas id="chart" width="800" height="400"></canvas>
+    <div class="application">
+      <canvas id="graph"></canvas>
+      <input type="range" id="timeline" min="0" max="36500" value="0" />
+      <div id="player">
+        <ul>
+          <li>
+            <span>Time:</span>
+            <div id="current-day">0</div>
+          </li>
+          <li>
+            <span> Brake up day: </span>
+            <div id="brake-up-day">0</div>
+          </li>
+          <li>
+            <span> Broke up: </span>
+            <div id="broke-up">0</div>
+          </li>
+        </ul>
+        <canvas id="scene"></canvas>
+        <div id="buttons">
+          <button type="button" id="speed-up">SPEED<br />UP</button>
+          <button type="button" id="new-at-max-button">
+            RUN NEW
+            <div id="new-at-max">0</div>
+            days/sec
+          </button>
+          <button type="button" id="speed-down">SPEED<br />DOWN</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
