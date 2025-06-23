@@ -4,14 +4,39 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Love Chart</title>
-    <script type="module" crossorigin src="/love-chart/assets/index-Cgj8dTZd.js"></script>
-    <link rel="stylesheet" crossorigin href="/love-chart/assets/index-BfEytaav.css">
+    <script type="module" crossorigin src="/love-chart/assets/index-CNUzGHV8.js"></script>
+    <link rel="stylesheet" crossorigin href="/love-chart/assets/index-5KioOVxA.css">
   </head>
   <body>
     <div class="application">
       <canvas id="graph"></canvas>
       <input type="range" id="timeline" min="0" max="36500" value="0" />
-      <canvas id="scene"></canvas>
+      <div id="player">
+        <ul>
+          <li>
+            <span>Time:</span>
+            <div id="current-day">0</div>
+          </li>
+          <li>
+            <span> Brake up day: </span>
+            <div id="brake-up-day">0</div>
+          </li>
+          <li>
+            <span> Broke up: </span>
+            <div id="broke-up">0</div>
+          </li>
+        </ul>
+        <canvas id="scene"></canvas>
+        <div id="buttons">
+          <button type="button" id="speed-up">SPEED UP</button>
+          <button type="button">
+            RUN NEW
+            <div id="new-at-max">0</div>
+            days per second
+          </button>
+          <button type="button" id="speed-down">SPEED DOWN</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
