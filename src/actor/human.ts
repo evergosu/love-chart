@@ -6,6 +6,8 @@ export class Human {
 
   constructor(
     public value: number,
+    public thoughts: string[],
+    public emojis: string[],
     decayRange: [number, number],
   ) {
     const [min, max] = decayRange;

@@ -192,7 +192,6 @@ export class Player {
     this.scene.draw(
       this.man,
       this.woman,
-      this.collision,
       Math.floor(day) - 1,
       this.frameDays,
       this.man.capacity,
