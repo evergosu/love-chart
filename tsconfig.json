@@ -8,7 +8,7 @@
     "rootDir": "./src",
     "strict": true,
     "target": "esnext",
-    "types": ["vite"]
+    "types": ["vite", "node"]
   },
   "exclude": ["vite.config.ts"]
 }

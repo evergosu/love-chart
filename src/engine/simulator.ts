@@ -16,16 +16,12 @@ export class Simulator {
   }
 
   private simulateDay() {
-    this.woman.decay(this.currentDay);
-    this.man.decay(this.currentDay);
-    this.woman.changeEmotions(this.currentDay);
+    this.woman.liveOneDay(this.currentDay);
+    this.man.liveOneDay(this.currentDay);
 
     this.collision.check(this.currentDay);
-    this.collision.checkBreakup(this.currentDay);
 
     if (this.collision.brakeUpDay) {
-      this.man.retainDiscontent();
-      this.woman.retainDiscontent();
       this.lastDay = Math.floor(this.collision.brakeUpDay * 1.5);
     }
 

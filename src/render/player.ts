@@ -25,7 +25,10 @@ export class Player {
     private totalDays: number,
     private daysPerSecond: number,
     private frameDays: number,
+    private isDebug: boolean,
   ) {
+    this.totalDays = this.collision.brakeUpDay ? totalDays : 365;
+
     this.estimateRefreshRate((hz) => {
       this.refreshRate = hz;
       console.log("Estimated refresh rate:", hz, "Hz");
@@ -51,13 +54,13 @@ export class Player {
 
     this.timeline = document.getElementById("timeline") as HTMLInputElement;
 
-    this.controls.up.onclick = () => this.updateSpeed(10);
+    this.controls.up.onclick = this.speedUp.bind(this);
 
-    this.controls.down.onclick = () => this.updateSpeed(-10);
+    this.controls.down.onclick = this.speedDown.bind(this);
 
     this.setupCanvasDrag(document.getElementById("graph") as HTMLCanvasElement);
 
-    this.timeline.max = String(totalDays);
+    this.timeline.max = String(this.totalDays);
 
     this.timeline.oninput = () => {
       this.seek(Number(this.timeline.value));
@@ -101,12 +104,24 @@ export class Player {
     requestAnimationFrame(frame);
   }
 
-  private updateSpeed(value: number) {
-    const result = Math.max(0, this.daysPerSecond + value);
+  private speedUp() {
+    if (this.daysPerSecond < 10) {
+      this.daysPerSecond++;
+    } else {
+      this.daysPerSecond += 10;
+    }
 
-    this.daysPerSecond = result;
+    window.localStorage.setItem("daysPerSecond", String(this.daysPerSecond));
+  }
 
-    window.localStorage.setItem("daysPerSecond", String(result));
+  private speedDown() {
+    if (this.daysPerSecond <= 10) {
+      this.daysPerSecond = Math.max(1, this.daysPerSecond - 1);
+    } else {
+      this.daysPerSecond -= 10;
+    }
+
+    window.localStorage.setItem("daysPerSecond", String(this.daysPerSecond));
   }
 
   setupCanvasDrag(canvas: HTMLCanvasElement) {
@@ -180,22 +195,34 @@ export class Player {
     const windowStart = Math.max(0, day - this.frameDays);
 
     this.graph.draw(
-      this.man.history,
-      this.woman.history,
+      this.man.capacityHistory,
+      this.woman.valueHistory,
+      this.man.valueHistory,
       this.collision,
       Math.floor(day),
       Math.floor(windowStart),
       this.frameDays,
-      this.man.capacity,
+      this.man.capacityHistory[0],
     );
 
     this.scene.draw(
       this.man,
       this.woman,
+      this.collision,
       Math.floor(day) - 1,
+      this.collision.brakeUpDay == null && day === this.totalDays,
       this.frameDays,
-      this.man.capacity,
+      this.man.capacityHistory[0],
     );
+
+    if (this.isDebug) {
+      this.graph.drawOverlayInfo(
+        this.man,
+        this.woman,
+        this.collision,
+        Math.floor(day) - 1,
+      );
+    }
 
     this.timeline.value = String(day);
     this.updateViews(day);
@@ -207,13 +234,10 @@ export class Player {
     const isAfterBrokenDay =
       this.collision.brakeUpDay && day >= this.collision.brakeUpDay;
 
-    this.info.updateBrokeUp(
-      isAfterBrokenDay ? this.collision.brokeUp! : "not yet",
-    );
-
-    this.info.updateBrakeUpDay(
-      isAfterBrokenDay ? this.collision.brakeUpDay! : "not yet",
-    );
+    if (isAfterBrokenDay) {
+      this.info.updateBrokeUp(this.collision.brokeUp!, this.collision.reason);
+      this.info.updateBrakeUpDay(this.collision.brakeUpDay!);
+    }
 
     this.controls.updateNewAtMax(this.daysPerSecond);
   }

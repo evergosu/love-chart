@@ -1,14 +1,11 @@
 import { Woman } from "../actor/woman.js";
 import { Man } from "../actor/man.js";
 import { Canvas } from "./canvas.js";
+import { Collision } from "../engine/collision.js";
 
 export class Scene extends Canvas {
   private currentSpacing: number = 0;
   private offset: number = 0;
-  private manThought = "";
-  private womanThought = "";
-  private manEmoji = "";
-  private womanEmoji = "";
 
   constructor(canvas: HTMLCanvasElement) {
     super(canvas);
@@ -151,40 +148,111 @@ export class Scene extends Canvas {
     woman: Woman,
     womanX: number,
     day: number,
+    collision: Collision,
   ) {
-    if (day % 30 === 0) {
-      const emotion = Math.floor(Math.random() * 100) - 5;
-      this.manThought = man.thoughts.at(emotion) ?? "";
-      this.womanThought = woman.thoughts.at(emotion) ?? "";
+    let manText = man.thoughtList.at(man.thoughtHistory.at(day)!)!;
+
+    if (
+      collision.brakeUpDay &&
+      day >= collision.brakeUpDay &&
+      collision.brokeUp === "man"
+    ) {
+      manText = man.breakupReasons[collision.reason];
+
+      if (day === man.valueHistory.length - 1) {
+        if (man.valueHistory[day] > man.valueHistory[collision.brakeUpDay]) {
+          manText =
+            man.exGoodQuotes[
+              Math.floor(Math.random() * man.exGoodQuotes.length)
+            ];
+        } else {
+          manText =
+            man.exBadQuotes[Math.floor(Math.random() * man.exBadQuotes.length)];
+        }
+      }
     }
 
-    if (this.manThought) {
-      this.drawSpeechBubble(
-        this.ctx,
-        this.manThought,
-        manX,
-        this.offset - 20 * this.scale,
-        "up",
-        false,
-      );
+    this.drawSpeechBubble(
+      this.ctx,
+      manText,
+      manX,
+      this.offset - 20 * this.scale,
+      "up",
+      false,
+    );
+
+    let womanText = man.thoughtList.at(man.thoughtHistory.at(day)!)!;
+
+    if (
+      collision.brakeUpDay &&
+      day >= collision.brakeUpDay &&
+      collision.brokeUp === "woman"
+    ) {
+      womanText = woman.breakupReasons[collision.reason];
+
+      if (day === woman.valueHistory.length - 1) {
+        if (
+          woman.valueHistory[day] > woman.valueHistory[collision.brakeUpDay]
+        ) {
+          womanText =
+            woman.exGoodQuotes[
+              Math.floor(Math.random() * woman.exGoodQuotes.length)
+            ];
+        } else {
+          womanText =
+            woman.exBadQuotes[
+              Math.floor(Math.random() * woman.exBadQuotes.length)
+            ];
+        }
+      }
     }
 
-    if (this.womanThought) {
-      this.drawSpeechBubble(
-        this.ctx,
-        this.womanThought,
-        womanX,
-        this.offset - 50 * this.scale,
-        "up",
-        true,
-      );
-    }
+    this.drawSpeechBubble(
+      this.ctx,
+      womanText,
+      womanX,
+      this.offset - 50 * this.scale,
+      "up",
+      true,
+    );
+  }
+
+  public drawSurvived() {
+    const ctx = this.ctx;
+
+    // Draw semi-transparent background
+    ctx.save();
+    ctx.fillStyle = "rgba(255, 0, 0, 0.15)";
+    ctx.fillRect(0, 0, this.logicalWidth, this.logicalHeight);
+
+    // Draw heart
+    ctx.font = `bold ${80 * this.scale}px serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = "#e00";
+    ctx.fillText(
+      "❤️",
+      this.logicalWidth / 2,
+      this.logicalHeight / 2 - 95 * this.scale,
+    );
+
+    // Draw message
+    ctx.font = `bold ${10 * this.scale}px sans-serif`;
+    ctx.fillStyle = "#000";
+    ctx.fillText(
+      "they lived to die on the same day",
+      this.logicalWidth / 2,
+      this.logicalHeight / 10,
+    );
+    ctx.restore();
   }
 
   public draw(
     man: Man,
     woman: Woman,
+    collision: Collision,
     day: number,
+    isHappyEnd: boolean,
     windowMaxX: number,
     windowMaxY: number,
   ) {
@@ -192,7 +260,7 @@ export class Scene extends Canvas {
 
     const safeDay = Math.max(
       0,
-      Math.min(day, man.history.length - 1, woman.history.length - 1),
+      Math.min(day, man.valueHistory.length - 1, woman.valueHistory.length - 1),
     );
 
     this.ctx.clearRect(0, 0, this.logicalWidth, this.logicalHeight);
@@ -200,7 +268,7 @@ export class Scene extends Canvas {
     const maxSpacing = this.logicalWidth * 0.8;
 
     const targetSpacingRaw =
-      Math.abs(woman.history[safeDay] - man.history[safeDay]) * 2;
+      Math.abs(woman.valueHistory[safeDay] - man.valueHistory[safeDay]) * 2;
 
     const targetSpacing = Math.min(targetSpacingRaw, maxSpacing);
 
@@ -214,16 +282,62 @@ export class Scene extends Canvas {
 
     const womanX = centerX + this.currentSpacing / 2;
 
-    if (day % 30 === 0) {
-      const emotion = Math.floor(Math.random() * 100) - 5;
-      this.manEmoji = man.emojis.at(emotion) ?? "";
-      this.womanEmoji = woman.emojis.at(emotion) ?? "";
+    let manEmoji = man.emojiList.at(man.thoughtHistory.at(day)!)!;
+
+    if (
+      collision.brakeUpDay &&
+      day >= collision.brakeUpDay &&
+      collision.brokeUp === "man"
+    ) {
+      manEmoji = man.breakupEmojis[collision.reason];
+
+      if (day === man.valueHistory.length - 1) {
+        if (man.valueHistory[day] > man.valueHistory[collision.brakeUpDay]) {
+          manEmoji =
+            man.exGoodEmojis[
+              Math.floor(Math.random() * man.exGoodEmojis.length)
+            ];
+        } else {
+          manEmoji =
+            man.exBadEmojis[Math.floor(Math.random() * man.exBadEmojis.length)];
+        }
+      }
     }
 
-    this.drawCharacter(manX, this.manEmoji, "#4682B4");
+    this.drawCharacter(manX, manEmoji, "#4682B4");
 
-    this.drawCharacter(womanX, this.womanEmoji, "#FF69B4");
+    let womanEmoji = woman.emojiList.at(woman.thoughtHistory.at(day)!)!;
 
-    this.drawThoughts(man, manX, woman, womanX, day);
+    if (
+      collision.brakeUpDay &&
+      day >= collision.brakeUpDay &&
+      collision.brokeUp === "woman"
+    ) {
+      womanEmoji = woman.breakupEmojis[collision.reason];
+
+      if (day === woman.valueHistory.length - 1) {
+        if (
+          woman.valueHistory[day] > woman.valueHistory[collision.brakeUpDay]
+        ) {
+          womanEmoji =
+            woman.exGoodEmojis[
+              Math.floor(Math.random() * woman.exGoodEmojis.length)
+            ];
+        } else {
+          womanEmoji =
+            woman.exBadEmojis[
+              Math.floor(Math.random() * woman.exBadEmojis.length)
+            ];
+        }
+      }
+    }
+
+    this.drawCharacter(womanX, womanEmoji, "#FF69B4");
+
+    this.drawThoughts(man, manX, woman, womanX, day, collision);
+
+    if (isHappyEnd) {
+      this.drawSurvived();
+    }
   }
 }

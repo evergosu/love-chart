@@ -1,16 +1,19 @@
 export class Info {
-  private currentDay: HTMLSpanElement;
-  private brakeUpDay: HTMLSpanElement;
-  private brokeUp: HTMLSpanElement;
+  private currentDay: HTMLDivElement;
+  private brakeUpDay: HTMLDivElement;
+  private brokeUpBy: HTMLDivElement;
+  private brokeUpReason: HTMLDivElement;
 
   constructor() {
-    this.currentDay = document.getElementById("current-day") as HTMLSpanElement;
+    this.currentDay = document.getElementById("current-day") as HTMLDivElement;
 
-    this.brokeUp = document.getElementById("broke-up") as HTMLSpanElement;
+    this.brokeUpBy = document.getElementById("broke-up-by") as HTMLDivElement;
 
-    this.brakeUpDay = document.getElementById(
-      "brake-up-day",
-    ) as HTMLSpanElement;
+    this.brokeUpReason = document.getElementById(
+      "broke-up-reason",
+    ) as HTMLDivElement;
+
+    this.brakeUpDay = document.getElementById("brake-up-day") as HTMLDivElement;
   }
 
   private formatDuration(daysTotal: number): string {
@@ -35,8 +38,8 @@ export class Info {
       typeof day === "number" ? this.formatDuration(day) : day;
   }
 
-  public updateBrokeUp(day: string | number) {
-    this.brokeUp.textContent =
-      typeof day === "number" ? this.formatDuration(day) : day;
+  public updateBrokeUp(person: string, reason: string) {
+    this.brokeUpBy.textContent = person;
+    this.brokeUpReason.textContent = reason;
   }
 }
