@@ -73,6 +73,7 @@ canvas#graph {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-width: 10rem;
 
   background-color: #eee;
   border: 1px solid #ccc;
