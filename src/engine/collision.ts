@@ -19,10 +19,10 @@ export class Collision {
   public loveState: LoveState = "PerfectLove";
   public reason:
     | "fells out of love"
-    | "lacks of freedom"
-    | "lacks of understanding"
-    | "lacks of trust"
-    | "lacks of common goals"
+    | "lack of freedom"
+    | "lack of understanding"
+    | "lack of trust"
+    | "lack of common goals"
     | "emotionally drained"
     | "wants different pace"
     | "unmet expectations" = "fells out of love";
@@ -258,7 +258,7 @@ export class Collision {
         // But she wants more.
         this.isHumanAboveForLongTime(this.woman, this.man.capacity, 190)
       ) {
-        this.setBreakup(day, "man", "lacks of freedom");
+        this.setBreakup(day, "man", "lack of freedom");
         return;
       }
 
@@ -270,7 +270,7 @@ export class Collision {
         // But he wants more.
         this.isHumanAboveForLongTime(this.man, this.man.capacity * 0.7, 17)
       ) {
-        this.setBreakup(day, "woman", "lacks of freedom");
+        this.setBreakup(day, "woman", "lack of freedom");
         return;
       }
 
@@ -279,7 +279,7 @@ export class Collision {
         this.man.discontent > 0.026 &&
         this.man.discontent > this.woman.discontent
       ) {
-        this.setBreakup(day, "man", "lacks of understanding");
+        this.setBreakup(day, "man", "lack of understanding");
         return;
       }
 
@@ -288,21 +288,21 @@ export class Collision {
         this.woman.discontent > 0.015 &&
         this.woman.discontent > this.man.discontent
       ) {
-        this.setBreakup(day, "woman", "lacks of understanding");
+        this.setBreakup(day, "woman", "lack of understanding");
         return;
       }
 
       if (
         this.valueDroppedFast(this.woman, 77, this.man.capacityHistory.at(0)!)
       ) {
-        this.setBreakup(day, "man", "lacks of trust");
+        this.setBreakup(day, "man", "lack of trust");
         return;
       }
 
       if (
         this.valueDroppedFast(this.man, 52, this.woman.initialManCapacity * 0.5)
       ) {
-        this.setBreakup(day, "woman", "lacks of trust");
+        this.setBreakup(day, "woman", "lack of trust");
         return;
       }
 
@@ -346,9 +346,9 @@ export class Collision {
       avgMan > this.man.capacity * 0.1 &&
       womanH.slice(-duration).some((x) => x < 0)
     ) {
-      this.setBreakup(day, "man", "lacks of common goals");
+      this.setBreakup(day, "man", "lack of common goals");
     } else if (avgWoman > -avgMan * 40) {
-      this.setBreakup(day, "woman", "lacks of common goals");
+      this.setBreakup(day, "woman", "lack of common goals");
     }
   }
 

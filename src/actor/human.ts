@@ -141,9 +141,9 @@ export const breakupEmojis: Record<Collision["reason"], string> = {
   "fells out of love": "😔",
   "wants different pace": "😬",
   "emotionally drained": "🥱",
-  "lacks of freedom": "😵",
-  "lacks of understanding": "😕",
-  "lacks of trust": "😒",
+  "lack of freedom": "😵",
+  "lack of understanding": "😕",
+  "lack of trust": "😒",
   "unmet expectations": "😐",
-  "lacks of common goals": "😔",
+  "lack of common goals": "😔",
 };

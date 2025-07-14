@@ -12,10 +12,10 @@ interface SimulationResult {
 const initiatorKeys = ["man", "woman"];
 const reasonKeys = [
   "fells out of love",
-  "lacks of freedom",
-  "lacks of understanding",
-  "lacks of trust",
-  "lacks of common goals",
+  "lack of freedom",
+  "lack of understanding",
+  "lack of trust",
+  "lack of common goals",
   "emotionally drained",
   "wants different pace",
   "unmet expectations",

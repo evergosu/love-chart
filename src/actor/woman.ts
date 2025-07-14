@@ -282,11 +282,11 @@ export const breakupReasons: Record<Collision["reason"], string> = {
   "fells out of love": "Моё сердце остыло",
   "wants different pace": "Он тянет и тянет...",
   "emotionally drained": "Я устала от этого",
-  "lacks of freedom": "Я потеряла свободу",
-  "lacks of understanding": "Он не слышит меня",
-  "lacks of trust": "Я ему не доверяю",
+  "lack of freedom": "Я потеряла свободу",
+  "lack of understanding": "Он не слышит меня",
+  "lack of trust": "Я ему не доверяю",
   "unmet expectations": "Это не то, что я хотела",
-  "lacks of common goals": "Мы хотим разного",
+  "lack of common goals": "Мы хотим разного",
 };
 
 export const exGoodQuotes: string[] = [
