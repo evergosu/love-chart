@@ -181,7 +181,7 @@ export class Scene extends Canvas {
       false,
     );
 
-    let womanText = man.thoughtList.at(man.thoughtHistory.at(day)!)!;
+    let womanText = woman.thoughtList.at(woman.thoughtHistory.at(day)!)!;
 
     if (
       collision.brakeUpDay &&
